@@ -31,7 +31,7 @@ Follow the steps below to run the game locally:
 
 ## 📸 Screenshots
 
-![Gameplay Screenshot](screenshot.png)
+![Gameplay Screenshot](Images/screenshot.png)
 
 ## 🤖 Tech Stack
 
