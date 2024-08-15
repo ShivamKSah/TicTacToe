@@ -1,90 +1,93 @@
-*{
-    margin : 0;
-    padding : 0;
-    box-sizing: border-box;
-}
+// some variables : 
 
-.wrapper{
-    height: 100vh;
-    width: 100vw;
-    background: url('Images/gradient.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+let currentPlayer;
+let grid;
 
-.currentPlayer{
-    color:white;
-    position: absolute;
-    top : 3rem;
-    left : 50%;
-    transform: translateX(-50%);
-    background-color: rgba(255,255,255,0.15);
-    border-radius: 1rem;
-    border : 1px solid rgba(255,255,255,0.15);
-    padding: 0.5rem 3rem;
-    text-align: center;
-}
+let playerTextClass = document.querySelector(".currentPlayer");
+let newGameButton = document.querySelector(".btn");
+let boxes = document.querySelectorAll(".gridItems");
 
-.grid{
-    width : 90%;
-    max-width: 20rem;
-    background-color: rgba(255,255,255,0.15);
-    border-radius: 1rem;
-    border : 1px solid rgba(255,255,255,0.15);
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    aspect-ratio: 1/1;
+const winningPositions = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6],
+];
 
+// Let's make a function which initialises the game : 
+
+function gameInitialisation(){
+    currentPlayer = "X";
+    grid = ["","","","","","","","",""]; 
+    playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
+    newGameButton.classList.remove('active');
+    // newGameButton.setAttribute("style","display:hidden");
+    for(eachBox of boxes){
+        eachBox.innerHTML = "";
+        eachBox.classList.remove('win');
+        eachBox.setAttribute("style","pointer-events:all");
+    }
 
 }
 
-.gridItems{
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1/1;
-    cursor: pointer;
-    font-size: 3rem;
-    color : white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+gameInitialisation();
+
+
+// Now what to do : 
+
+function afterWinning(){
+    // winning positions par green mark karo : 
+    playerTextClass.innerHTML = `Player-${currentPlayer} won`;
+    for(box of boxes){
+        box.setAttribute("style","pointer-events:none");
+    }
+    newGameButton.classList.add('active');
 }
 
-.box1,.box2,.box5,.box4{
-    border-right: 2px solid white;
-    border-bottom: 2px solid white;
-}
-.box3,.box6{
-    border-bottom: 2px solid white;
-}
-.box7,.box8{
-    border-right: 2px solid white;
+newGameButton.addEventListener('click',()=>{
+    gameInitialisation();
+});
+
+function isWon(){
+    for(index of winningPositions){
+        if((grid[index[0]]=="X"&&grid[index[1]]=="X"&&grid[index[2]]=="X")||(grid[index[0]]=="O"&&grid[index[1]]=="O"&&grid[index[2]]=="O")){
+            boxes[index[0]].classList.add('win');
+            boxes[index[1]].classList.add('win');
+            boxes[index[2]].classList.add('win');
+            return true;
+        }
+    }
+
+    return false;
 }
 
-.btn{
-    color : white;
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(255,255,255,0.15);
-    border-radius: 1rem;
-    border : 1px solid rgba(255,255,255,0.15);
-    padding : 0.5rem 2rem;
-    cursor: pointer;
-    display: none;
+function swapTurns(){
+    if(currentPlayer=="X"){
+        currentPlayer = "O";
+    }
+    else
+    currentPlayer = "X";
 }
 
-.active{
-    display: flex;
-}
+function handleClick(index){
+    if(grid[index]==""){
+        grid[index] = currentPlayer;
+        boxes[index].innerHTML = currentPlayer;
+        if(isWon()){
+            afterWinning();
+            return;
+        }
+        swapTurns();
+        playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
+    }
+};
 
-.win{
-    background-color: rgba(0,255,0,0.3);
-}
-
+boxes.forEach(function(box,index){
+    box.addEventListener('click',()=>{
+        handleClick(index);
+    })
+});
