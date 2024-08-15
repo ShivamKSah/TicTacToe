@@ -23,7 +23,7 @@ const winningPositions = [
 function gameInitialisation(){
     currentPlayer = "X";
     grid = ["","","","","","","","",""]; 
-    playerTextClass.innerHTML = 'Current Player-${currentPlayer}';
+    playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
     newGameButton.classList.remove('active');
     // newGameButton.setAttribute("style","display:hidden");
     for(eachBox of boxes){
@@ -41,7 +41,7 @@ gameInitialisation();
 
 function afterWinning(){
     // winning positions par green mark karo : 
-    playerTextClass.innerHTML = 'Player-${currentPlayer} won';
+    playerTextClass.innerHTML = `Player-${currentPlayer} won`;
     for(box of boxes){
         box.setAttribute("style","pointer-events:none");
     }
@@ -82,7 +82,7 @@ function handleClick(index){
             return;
         }
         swapTurns();
-        playerTextClass.innerHTML = 'Current Player-${currentPlayer}';
+        playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
     }
 };
 
