@@ -25,19 +25,14 @@ function gameInitialisation(){
     grid = ["","","","","","","","",""]; 
     playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
     newGameButton.classList.remove('active');
-    // newGameButton.setAttribute("style","display:hidden");
     for(eachBox of boxes){
         eachBox.innerHTML = "";
         eachBox.classList.remove('win');
         eachBox.setAttribute("style","pointer-events:all");
     }
-
 }
 
 gameInitialisation();
-
-
-// Now what to do : 
 
 function afterWinning(){
     // winning positions par green mark karo : 
@@ -48,9 +43,10 @@ function afterWinning(){
     newGameButton.classList.add('active');
 }
 
-newGameButton.addEventListener('click',()=>{
-    gameInitialisation();
-});
+function handleDraw(){
+    playerTextClass.innerHTML = `It's a Tie!`;
+    newGameButton.classList.add('active');
+}
 
 function isWon(){
     for(index of winningPositions){
@@ -61,33 +57,38 @@ function isWon(){
             return true;
         }
     }
-
     return false;
 }
 
+function isDraw(){
+    return grid.every(cell => cell !== "");
+}
+
 function swapTurns(){
-    if(currentPlayer=="X"){
-        currentPlayer = "O";
-    }
-    else
-    currentPlayer = "X";
+    currentPlayer = (currentPlayer === "X") ? "O" : "X";
 }
 
 function handleClick(index){
-    if(grid[index]==""){
+    if(grid[index] === ""){
         grid[index] = currentPlayer;
         boxes[index].innerHTML = currentPlayer;
         if(isWon()){
             afterWinning();
-            return;
+        } else if (isDraw()) {
+            handleDraw();
+        } else {
+            swapTurns();
+            playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
         }
-        swapTurns();
-        playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
     }
-};
+}
 
-boxes.forEach(function(box,index){
-    box.addEventListener('click',()=>{
+newGameButton.addEventListener('click', ()=>{
+    gameInitialisation();
+});
+
+boxes.forEach(function(box, index){
+    box.addEventListener('click', ()=>{
         handleClick(index);
-    })
+    });
 });
