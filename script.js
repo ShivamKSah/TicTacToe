@@ -1,5 +1,4 @@
-// some variables : 
-
+// Variables
 let currentPlayer;
 let grid;
 
@@ -18,14 +17,13 @@ const winningPositions = [
     [2,4,6],
 ];
 
-// Let's make a function which initialises the game : 
-
+// Game Initialization
 function gameInitialisation(){
     currentPlayer = "X";
     grid = ["","","","","","","","",""]; 
-    playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
+    playerTextClass.innerHTML = `Current Player - ${currentPlayer}`;
     newGameButton.classList.remove('active');
-    for(eachBox of boxes){
+    for(let eachBox of boxes){
         eachBox.innerHTML = "";
         eachBox.classList.remove('win');
         eachBox.setAttribute("style","pointer-events:all");
@@ -35,9 +33,8 @@ function gameInitialisation(){
 gameInitialisation();
 
 function afterWinning(){
-    // winning positions par green mark karo : 
-    playerTextClass.innerHTML = `Player-${currentPlayer} won`;
-    for(box of boxes){
+    playerTextClass.innerHTML = `Player - ${currentPlayer} won`;
+    for(let box of boxes){
         box.setAttribute("style","pointer-events:none");
     }
     newGameButton.classList.add('active');
@@ -48,9 +45,11 @@ function handleDraw(){
     newGameButton.classList.add('active');
 }
 
+// Check if someone has won
 function isWon(){
-    for(index of winningPositions){
-        if((grid[index[0]]=="X"&&grid[index[1]]=="X"&&grid[index[2]]=="X")||(grid[index[0]]=="O"&&grid[index[1]]=="O"&&grid[index[2]]=="O")){
+    for(let index of winningPositions){
+        if((grid[index[0]] == "X" && grid[index[1]] == "X" && grid[index[2]] == "X") || 
+           (grid[index[0]] == "O" && grid[index[1]] == "O" && grid[index[2]] == "O")){
             boxes[index[0]].classList.add('win');
             boxes[index[1]].classList.add('win');
             boxes[index[2]].classList.add('win');
@@ -60,14 +59,17 @@ function isWon(){
     return false;
 }
 
+// Check if the game is a draw
 function isDraw(){
     return grid.every(cell => cell !== "");
 }
 
+// Swap turns
 function swapTurns(){
-    currentPlayer = (currentPlayer === "X") ? "O" : "X";
+    currentPlayer = (currentPlayer == "X") ? "O" : "X";
 }
 
+// Handle clicks
 function handleClick(index){
     if(grid[index] === ""){
         grid[index] = currentPlayer;
@@ -78,17 +80,19 @@ function handleClick(index){
             handleDraw();
         } else {
             swapTurns();
-            playerTextClass.innerHTML = `Current Player-${currentPlayer}`;
+            playerTextClass.innerHTML = `Current Player - ${currentPlayer}`;
         }
     }
 }
 
-newGameButton.addEventListener('click', ()=>{
+// New Game Button Event Listener
+newGameButton.addEventListener('click', () => {
     gameInitialisation();
 });
 
-boxes.forEach(function(box, index){
-    box.addEventListener('click', ()=>{
+// Add click event listeners to boxes
+boxes.forEach((box, index) => {
+    box.addEventListener('click', () => {
         handleClick(index);
     });
 });
